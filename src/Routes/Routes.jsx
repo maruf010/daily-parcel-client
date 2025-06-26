@@ -5,6 +5,14 @@ import Login from "../Pages/Authentication/Login";
 import AuthLayout from "../layouts/AuthLayout";
 import Register from "../Pages/Authentication/Register";
 import Coverage from "../Pages/Coverage/Coverage";
+import PrivateRoute from "./PrivateRoute";
+import SendParcel from "../Pages/SendParcel/SendParcel";
+import DashboardLayout from "../layouts/DashBoardLayout";
+import Payment from "../Pages/Dashboard/Payment/Payment";
+import MyParcels from "../Pages/Dashboard/MyParcels/MyParcels";
+import PaymentHistory from "../Pages/Dashboard/PaymentHistory/PaymentHistory";
+import TrackParcel from "../Pages/Dashboard/TrackParcel/TrackParcel";
+
 
 
 export const router = createBrowserRouter([
@@ -19,7 +27,14 @@ export const router = createBrowserRouter([
             {
                 path: '/coverage',
                 Component: Coverage,
-                loader: () => fetch('./serviceCenter.json')
+                loader: () => fetch('./serviceCenter.json'),
+            },
+            {
+                path: '/sendParcel',
+                element: <PrivateRoute>
+                    <SendParcel></SendParcel>
+                </PrivateRoute>,
+                loader: () => fetch('./serviceCenter.json'),
             }
         ]
     },
@@ -36,5 +51,30 @@ export const router = createBrowserRouter([
                 Component: Register
             }
         ]
+    },
+    {
+        path: '/dashboard',
+        element: <PrivateRoute>
+            <DashboardLayout></DashboardLayout>
+        </PrivateRoute>,
+        children: [
+            {
+                path: 'myParcels',
+                Component: MyParcels
+            },
+            {
+                path: 'payment/:parcelId',
+                Component: Payment
+            },
+            {
+                path: 'paymentHistory',
+                Component: PaymentHistory
+            },
+            {
+                path: 'track',
+                Component: TrackParcel
+            }
+        ]
     }
+
 ]);

@@ -6,17 +6,20 @@ import { router } from './Routes/Routes.jsx';
 import Aos from 'aos';
 import 'aos/dist/aos.css';
 import AuthProvider from './Context/AuthContext/AuthProvider.jsx';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 Aos.init();
 
+const queryClient = new QueryClient();
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <div className='bg-[#EAECED] lg:pt-5 '>
-      <div className='font-urbanist '>
+    <div className='font-urbanist '>
+      <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <RouterProvider router={router} />
         </AuthProvider>
-      </div>
+      </QueryClientProvider>
     </div>
   </StrictMode>,
 )

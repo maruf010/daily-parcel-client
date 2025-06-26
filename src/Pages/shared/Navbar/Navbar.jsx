@@ -1,15 +1,37 @@
 import React from 'react';
-import { NavLink } from 'react-router';
+import { Link, NavLink, useNavigate } from 'react-router';
 import WebLogo from '../WebLogo/WebLogo';
+import useAuth from '../../../Hooks/useAuth';
 
 const Navbar = () => {
+    const { user, logOut } = useAuth();
+    const navigate = useNavigate();
+
     const links = <>
         <li><NavLink to="/">Home</NavLink></li>
+        <li><NavLink to="/sendParcel">Send a Percel</NavLink></li>
         <li><NavLink to="/coverage">Coverage</NavLink></li>
+        {
+            user && <>
+                <li><NavLink to="/dashboard">dashboard</NavLink></li>
+            </>
+        }
         <li><NavLink>About us</NavLink></li>
     </>
+
+    const handleLogOut = () => {
+        logOut()
+            .then(result => {
+                console.log(result);
+                navigate('/login')
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    };
+
     return (
-        <div className="navbar rounded-lg bg-base-100 shadow-sm">
+        <div className="navbar py-5 rounded-xl bg-base-100 shadow-md">
             <div className="navbar-start">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -31,7 +53,10 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-end">
-                <a className="btn">Button</a>
+                {
+                    user ? <button onClick={handleLogOut} className='btn '>Logout</button> :
+                        <Link to='/login' className='btn text-black btn-primary'>Login</Link>
+                }
             </div>
         </div>
     );

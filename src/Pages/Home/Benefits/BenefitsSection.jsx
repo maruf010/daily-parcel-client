@@ -41,6 +41,7 @@ const BenefitsSection = () => {
                     {benefits.map((benefit) => (
                         <div
                             key={benefit.id}
+                            data-aos="zoom-in-up"
                             className='flex flex-col lg:flex-row items-center gap-6 p-6 bg-white rounded-xl shadow-md'
                         >
                             {/* Image with vertical dashed line */}

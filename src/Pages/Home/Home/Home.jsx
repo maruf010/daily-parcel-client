@@ -8,7 +8,7 @@ import Merchant from '../Merchant/Merchant';
 const Home = () => {
     return (
         <>
-            <div className='my-5'>
+            <div className='md:my-5'>
                 <Banner></Banner>
             </div>
             <Services></Services>
