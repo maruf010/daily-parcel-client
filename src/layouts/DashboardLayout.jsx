@@ -6,7 +6,9 @@ import {
     FaBox,
     FaCreditCard,
     FaMapMarkedAlt,
-    FaUser
+    FaUser,
+    FaMotorcycle,
+    FaUserClock
 } from "react-icons/fa";
 // import ProFastLogo from '../pages/shared/ProFastLogo/ProFastLogo';
 
@@ -51,7 +53,7 @@ const DashboardLayout = () => {
                     {/* Sidebar content here */}
                     <WebLogo></WebLogo>
                     <li>
-                        <NavLink to="/dashboard/home">
+                        <NavLink to="/dashboard">
                             <FaHome className="inline-block mr-2" /> Home
                         </NavLink>
                     </li>
@@ -73,6 +75,17 @@ const DashboardLayout = () => {
                     <li>
                         <NavLink to="/dashboard/profile">
                             <FaUser className="inline-block mr-2" /> Profile
+                        </NavLink>
+                    </li>
+                    {/* riders link */}
+                    <li>
+                        <NavLink to="/dashboard/activeRiders">
+                            <FaMotorcycle className="inline-block mr-2" /> Active Riders
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/dashboard/pendingRiders">
+                            <FaUserClock className="inline-block mr-2" /> Pending Riders
                         </NavLink>
                     </li>
                 </ul>
