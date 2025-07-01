@@ -3,6 +3,7 @@ import Swal from 'sweetalert2';
 import { useLoaderData, useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useTrackingLogger from "../../hooks/useTrackingLogger";
 
 
 
@@ -25,10 +26,11 @@ const SendParcel = () => {
     const axiosSecure = useAxiosSecure();
     const serviceCenters = useLoaderData();
     const navigate = useNavigate();
+    const { logTracking } = useTrackingLogger();
 
     // Extract unique regions
     const uniqueRegions = [...new Set(serviceCenters.map((w) => w.region))];
-    
+
     // Get districts by region
     const getDistrictsByRegion = (region) =>
         serviceCenters.filter((w) => w.region === region).map((w) => w.district);
@@ -95,6 +97,7 @@ const SendParcel = () => {
             },
         }).then((result) => {
             if (result.isConfirmed) {
+                const tracking_id = generateTrackingID()
                 const parcelData = {
                     ...data,
                     cost: totalCost,
@@ -102,17 +105,17 @@ const SendParcel = () => {
                     payment_status: 'unpaid',
                     delivery_status: 'not_collected',
                     creation_date: new Date().toISOString(),
-                    tracking_id: generateTrackingID(),
+                    tracking_id: tracking_id,
                 };
 
                 console.log("Ready for payment:", parcelData);
-                
+
                 axiosSecure.post('/parcels', parcelData)
-                    .then(res => {
+                    .then(async (res) => {
                         console.log(res.data);
                         if (res.data.insertedId) {
                             // TODO: redirect to a payment page 
-                            
+
                             Swal.fire({
                                 title: "Redirecting...",
                                 text: "Proceeding to payment gateway.",
@@ -120,13 +123,21 @@ const SendParcel = () => {
                                 timer: 1500,
                                 showConfirmButton: false,
                             });
+
+                            await logTracking({
+                                tracking_id: parcelData.tracking_id,
+                                status: "parcel_created",
+                                details: `Created by ${user.displayName}`,
+                                updated_by: user.email,
+                            })
+                            
                             navigate('/dashboard/myParcels')
                         }
                     })
-                
             }
         });
     };
+
 
     return (
         <div className="p-6 max-w-6xl mx-auto">

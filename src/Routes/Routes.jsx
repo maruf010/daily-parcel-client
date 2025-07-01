@@ -22,6 +22,7 @@ import AssignRider from "../Pages/Dashboard/AssignRider/AssignRider";
 import RiderRoutes from "./RiderRoutes";
 import PendingDeliveries from "../Pages/Dashboard/PendingDeliveries/PendingDeliveries";
 import CompletedDeliveries from "../Pages/Dashboard/CompletedDeliveries/CompletedDeliveries";
+import MyEarnings from "../Pages/Dashboard/MyEarnings/MyEarnings";
 
 
 
@@ -95,6 +96,7 @@ export const router = createBrowserRouter([
                 path: 'track',
                 Component: TrackParcel
             },
+            
             //rider routes
             {
                 path: 'pending-deliveries',
@@ -106,6 +108,12 @@ export const router = createBrowserRouter([
                 path: 'completed-deliveries',
                 element: <RiderRoutes>
                     <CompletedDeliveries></CompletedDeliveries>
+                </RiderRoutes>
+            },
+            {
+                path: 'my-earnings',
+                element:<RiderRoutes>
+                    <MyEarnings></MyEarnings>
                 </RiderRoutes>
             },
 

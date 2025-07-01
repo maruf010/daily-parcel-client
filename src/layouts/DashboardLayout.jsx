@@ -12,7 +12,8 @@ import {
     FaUserShield,
     FaUserPlus,
     FaTasks,
-    FaCheckCircle
+    FaCheckCircle,
+    FaMoneyBillWave
 } from "react-icons/fa";
 import useUserRole from '../hooks/useUserRole';
 // import ProFastLogo from '../pages/shared/ProFastLogo/ProFastLogo';
@@ -98,6 +99,11 @@ const DashboardLayout = () => {
                             <li>
                                 <NavLink to="/dashboard/completed-deliveries">
                                     <FaCheckCircle className="inline-block mr-2" /> Completed Deliveries
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/my-earnings">
+                                    <FaMoneyBillWave className="inline-block mr-2" /> My Earnings
                                 </NavLink>
                             </li>
                         </>

@@ -5,9 +5,11 @@ import { useNavigate, useParams } from 'react-router';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import useAuth from '../../../hooks/useAuth';
 import Swal from 'sweetalert2';
+import useTrackingLogger from '../../../hooks/useTrackingLogger';
 
 
 const CheckoutForm = () => {
+
     const { user } = useAuth();
     const navigate = useNavigate();
 
@@ -17,8 +19,9 @@ const CheckoutForm = () => {
     const { parcelId } = useParams();
     console.log(parcelId);
     const axiosSecure = useAxiosSecure();
-
+    const { logTracking } = useTrackingLogger();
     const [error, setError] = useState('');
+
 
     const { data: parcelInfo, isPending } = useQuery({
         queryKey: ['parcels', parcelId],
@@ -94,19 +97,27 @@ const CheckoutForm = () => {
                         parcelId,
                         email: user.email,
                         amount,
-                        transactionId:result.paymentIntent.id,
+                        transactionId: result.paymentIntent.id,
                         paymentMethod: result.paymentIntent.payment_method_types,
                     }
-                    const paymentRes = await axiosSecure.post('/payments',paymentData);
-                    if(paymentRes.data.insertedId){
+                    const paymentRes = await axiosSecure.post('/payments', paymentData);
+                    if (paymentRes.data.insertedId) {
                         console.log('Payment successfully');
-                        
+
                         await Swal.fire({
                             icon: 'success',
                             title: 'Payment successful!',
                             html: `Transaction ID : ${result.paymentIntent.id}`,
                             confirmButtonText: 'Go to My Parcels',
                         })
+                        
+                        await logTracking({
+                            tracking_id: parcelInfo.tracking_id,
+                            status: "payment_done",
+                            details: `Created by ${user.displayName}`,
+                            updated_by: user.email,
+                        })
+
                         navigate('/dashboard/myParcels')
                     }
                 }
