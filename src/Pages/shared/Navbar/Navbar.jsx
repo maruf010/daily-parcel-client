@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, NavLink, useNavigate } from 'react-router';
 import WebLogo from '../WebLogo/WebLogo';
-import useAuth from '../../../Hooks/useAuth';
+import useAuth from '../../../hooks/useAuth';
 
 const Navbar = () => {
     const { user, logOut } = useAuth();

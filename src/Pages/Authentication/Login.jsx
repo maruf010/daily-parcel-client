@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useLocation, useNavigate } from 'react-router';
 import SocialLogin from './SocialLogin/SocialLogin';
-import useAuth from '../../Hooks/useAuth';
+import useAuth from '../../hooks/useAuth';
 
 const Login = () => {
 
@@ -47,7 +47,7 @@ const Login = () => {
                         <button className="btn btn-primary text-black mt-4">Login</button>
                     </fieldset>
                 </form>
-                <p><small>New to this website? <Link to='/register' className='text-blue-500'>Register</Link> </small></p>
+                <p><small>New to this website? <Link state={{ from }} to='/register' className='text-blue-500'>Register</Link> </small></p>
 
                 <SocialLogin></SocialLogin>
             </div>

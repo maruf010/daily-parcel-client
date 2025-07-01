@@ -15,6 +15,13 @@ import TrackParcel from "../Pages/Dashboard/TrackParcel/TrackParcel";
 import BeARider from "../Pages/Dashboard/BeARider/BeARider";
 import PendingRiders from "../Pages/Dashboard/PendingRiders/PendingRiders";
 import ActiveRiders from "../Pages/Dashboard/ActiveRiders/ActiveRiders";
+import MakeAdmin from "../Pages/Dashboard/MakeAdmin/MakeAdmin";
+import Forbidden from "../Pages/Forbidden/Forbidden";
+import AdminRoute from "./AdminRoute";
+import AssignRider from "../Pages/Dashboard/AssignRider/AssignRider";
+import RiderRoutes from "./RiderRoutes";
+import PendingDeliveries from "../Pages/Dashboard/PendingDeliveries/PendingDeliveries";
+import CompletedDeliveries from "../Pages/Dashboard/CompletedDeliveries/CompletedDeliveries";
 
 
 
@@ -31,6 +38,10 @@ export const router = createBrowserRouter([
                 path: '/coverage',
                 Component: Coverage,
                 loader: () => fetch('./serviceCenter.json'),
+            },
+            {
+                path: 'forbidden',
+                Component: Forbidden
             },
             {
                 path: 'beARider',
@@ -84,14 +95,45 @@ export const router = createBrowserRouter([
                 path: 'track',
                 Component: TrackParcel
             },
+            //rider routes
+            {
+                path: 'pending-deliveries',
+                element: <RiderRoutes>
+                    <PendingDeliveries></PendingDeliveries>
+                </RiderRoutes>
+            },
+            {
+                path: 'completed-deliveries',
+                element: <RiderRoutes>
+                    <CompletedDeliveries></CompletedDeliveries>
+                </RiderRoutes>
+            },
+
+            // admin route
+            {
+                path: 'assignRider',
+                element: <AdminRoute>
+                    <AssignRider></AssignRider>
+                </AdminRoute>
+            },
             {
                 path: 'pendingRiders',
-                Component: PendingRiders
+                element: <AdminRoute>
+                    <PendingRiders></PendingRiders>
+                </AdminRoute>
             },
             {
                 path: 'activeRiders',
-                Component: ActiveRiders
-            }
+                element: <AdminRoute>
+                    <ActiveRiders></ActiveRiders>
+                </AdminRoute>
+            },
+            {
+                path: 'makeAdmin',
+                element: <AdminRoute>
+                    <MakeAdmin></MakeAdmin>
+                </AdminRoute>
+            },
         ]
     }
 

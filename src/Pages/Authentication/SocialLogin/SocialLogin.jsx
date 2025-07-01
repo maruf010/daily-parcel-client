@@ -1,7 +1,7 @@
 import React from 'react';
-import useAuth from '../../../Hooks/useAuth';
+import useAuth from '../../../hooks/useAuth';
 import { useLocation, useNavigate } from 'react-router';
-import useAxios from '../../../Hooks/useAxios';
+import useAxios from '../../../hooks/useAxios';
 
 const SocialLogin = () => {
 

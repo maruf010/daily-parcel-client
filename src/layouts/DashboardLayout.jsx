@@ -8,12 +8,20 @@ import {
     FaMapMarkedAlt,
     FaUser,
     FaMotorcycle,
-    FaUserClock
+    FaUserClock,
+    FaUserShield,
+    FaUserPlus,
+    FaTasks,
+    FaCheckCircle
 } from "react-icons/fa";
+import useUserRole from '../hooks/useUserRole';
 // import ProFastLogo from '../pages/shared/ProFastLogo/ProFastLogo';
 
 
 const DashboardLayout = () => {
+    const { role, roleLoading } = useUserRole();
+    console.log(role);
+
     return (
         <div className="drawer lg:drawer-open">
             <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
@@ -77,17 +85,53 @@ const DashboardLayout = () => {
                             <FaUser className="inline-block mr-2" /> Profile
                         </NavLink>
                     </li>
+
                     {/* riders link */}
-                    <li>
-                        <NavLink to="/dashboard/activeRiders">
-                            <FaMotorcycle className="inline-block mr-2" /> Active Riders
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/dashboard/pendingRiders">
-                            <FaUserClock className="inline-block mr-2" /> Pending Riders
-                        </NavLink>
-                    </li>
+                    {
+                        !roleLoading && role === 'rider' &&
+                        <>
+                            <li>
+                                <NavLink to="/dashboard/pending-deliveries">
+                                    <FaTasks className="inline-block mr-2" /> Pending Deliveries
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/completed-deliveries">
+                                    <FaCheckCircle className="inline-block mr-2" /> Completed Deliveries
+                                </NavLink>
+                            </li>
+                        </>
+                    }
+
+                    {/* admin routes */}
+                    {!roleLoading && role === 'admin' &&
+                        <>
+                            {/* riders */}
+                            <li>
+                                <NavLink to="/dashboard/assignRider">
+                                    <FaUserPlus className="inline-block mr-2" /> Assign Rider
+                                </NavLink>
+                            </li>
+
+                            <li>
+                                <NavLink to="/dashboard/activeRiders">
+                                    <FaMotorcycle className="inline-block mr-2" /> Active Riders
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/pendingRiders">
+                                    <FaUserClock className="inline-block mr-2" /> Pending Riders
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/makeAdmin">
+                                    <FaUserShield className="inline-block mr-2" /> Make Admin
+                                </NavLink>
+                            </li>
+
+                        </>
+                    }
+
                 </ul>
             </div>
         </div>

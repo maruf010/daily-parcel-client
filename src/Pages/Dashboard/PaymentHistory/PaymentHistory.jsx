@@ -1,12 +1,14 @@
 import React from 'react';
-import useAuth from '../../../Hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
-import useAxiosSecure from '../../../Hooks/useAxiosSecure';
+import useAuth from '../../../hooks/useAuth';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+
 
 const formatDate = (iso) => new Date(iso).toLocaleString();
 
-const PaymentHistory = () => {
 
+
+const PaymentHistory = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
 
@@ -17,47 +19,50 @@ const PaymentHistory = () => {
             return res.data;
         }
     })
+    console.log(payments);
+
     if (isPending) {
         return '...loading'
     }
 
-
     return (
-        <div className="overflow-x-auto p-4">
-            <h2 className="text-2xl font-bold mb-4">Payment History</h2>
-            <table className="table table-zebra w-full text-sm">
-                <thead className="bg-base-200">
+        <div className="overflow-x-auto shadow-md rounded-xl">
+            <table className="table table-zebra w-full">
+                <thead className="bg-base-200 text-base font-semibold">
                     <tr>
                         <th>#</th>
                         <th>Parcel ID</th>
-                        <th>Email</th>
-                        <th>Amount (৳)</th>
-                        <th>Method</th>
-                        <th>Transaction ID</th>
-                        <th>Date & Time</th>
-                        <th>Action</th>
+                        <th>Amount</th>
+                        <th>Transaction</th>
+                        <th>Paid At</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {payments.map((payment, index) => (
-                        <tr key={payment._id}>
-                            <td>{index + 1}</td>
-                            <td>{payment.parcelId}</td>
-                            <td>{payment.email}</td>
-                            <td className="text-green-600 font-semibold">৳{payment.amount}</td>
-                            <td>{payment.paymentMethod || "N/A"}</td>
-                            <td>{payment.transactionId || "N/A"}</td>
-                            <td>{formatDate(payment.paid_at)}</td>
-                            <td>
-                                <button className="btn btn-sm btn-outline btn-info">Details</button>
+                    {payments?.length > 0 ? (
+                        payments.map((p, index) => (
+                            <tr key={p.transactionId}>
+                                <td>{index + 1}</td>
+                                <td className="truncate" title={p.parcelId}>
+                                    {p.parcelId}...
+                                </td>
+                                <td>৳{p.amount}</td>
+                                <td className="font-mono text-sm">
+                                    <span title={p.transactionId}>
+                                        {p.transactionId}...
+                                    </span>
+                                </td>
+                                <td>{formatDate(p.paid_at_string)}</td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="7" className="text-center text-gray-500 py-6">
+                                No payment history found.
                             </td>
                         </tr>
-                    ))}
+                    )}
                 </tbody>
             </table>
-            {payments.length === 0 && (
-                <p className="text-center text-gray-500 mt-4">No payment history found.</p>
-            )}
         </div>
     );
 };

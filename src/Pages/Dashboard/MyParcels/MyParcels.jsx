@@ -1,15 +1,14 @@
-import React from 'react';
-import useAuth from '../../../Hooks/useAuth';
-import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
-import { format } from "date-fns";
+import React from 'react';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router';
+import useAuth from '../../../hooks/useAuth';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+
+
 
 const MyParcels = () => {
-
     const { user } = useAuth();
-
     const axiosSecure = useAxiosSecure();
     const navigate = useNavigate();
 
@@ -22,59 +21,58 @@ const MyParcels = () => {
     })
     console.log(parcels);
 
-    const handleView = (parcel) => {
-        console.log("Viewing:", parcel);
-        // Show details modal or navigate
+    const handleView = (id) => {
+        console.log("View parcel", id);
+        // You could open a modal or navigate to a detail page
     };
 
     const handlePay = (id) => {
-        console.log("Paying for:", id);
-        // Payment logic here
+        console.log("Proceed to payment for", id);
         navigate(`/dashboard/payment/${id}`)
     };
 
-    const handleDelete = (id) => {
-        Swal.fire({
+    const handleDelete = async (id) => {
+        const confirm = await Swal.fire({
             title: "Are you sure?",
-            text: "You won't be able to revert this!",
+            text: "This parcel will be permanently deleted!",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonText: "Yes, delete it!",
+            confirmButtonText: "Yes, delete it",
             cancelButtonText: "Cancel",
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                try {
-                    // const res = await fetch(`/api/parcels/${id}`, {
-                    //     method: "DELETE",
-                    // });
-                    axiosSecure.delete(`/parcels/${id}`)
-                        .then(res => {
-                            console.log(res.data);
-                            if (res.data.deletedCount) {
-
-                                Swal.fire({
-                                    title: "Deleted!",
-                                    text: "Parcel has been deleted successfully.",
-                                    icon: "success",
-                                    timer: 1500,
-                                    showConfirmButton: false
-                                });
-                            }
-                            else {
-                                Swal.fire("Error", "Failed to delete the parcel.", "error");
-                            }
-                            refetch();
-                        })
-                } catch (err) {
-                    Swal.fire("Error", "Something went wrong.", "error");
-                    console.error(err);
-                }
-            }
+            confirmButtonColor: "#e11d48", // red-600
+            cancelButtonColor: "#6b7280",  // gray-500
         });
+        if (confirm.isConfirmed) {
+            try {
+
+                axiosSecure.delete(`/parcels/${id}`)
+                    .then(res => {
+                        console.log(res.data);
+                        if (res.data.deletedCount) {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Parcel has been deleted.",
+                                icon: "success",
+                                timer: 1500,
+                                showConfirmButton: false,
+                            });
+                        }
+                        refetch();
+                    })
+
+
+            } catch (err) {
+                Swal.fire("Error", err.message || "Failed to delete parcel", "error");
+            }
+        }
+    };
+
+    const formatDate = (iso) => {
+        return new Date(iso).toLocaleString(); // Format: "6/22/2025, 3:11:31 AM"
     };
 
     return (
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto shadow-md rounded-xl">
             <table className="table table-zebra w-full">
                 <thead className="bg-base-200 text-base font-semibold">
                     <tr>
@@ -91,10 +89,10 @@ const MyParcels = () => {
                     {parcels.map((parcel, index) => (
                         <tr key={parcel._id}>
                             <td>{index + 1}</td>
-                            <td className='max-w-[180px] truncate'>{parcel.title}</td>
-                            <td className="capitalize">{parcel.type.replace("-", " ")}</td>
-                            <td>{format(new Date(parcel.createdAt), "PPP p")}</td>
-                            <td>৳ {parcel.cost}</td>
+                            <td className="max-w-[180px] truncate">{parcel.title}</td>
+                            <td className="capitalize">{parcel.type}</td>
+                            <td>{formatDate(parcel.creation_date)}</td>
+                            <td>৳{parcel.cost}</td>
                             <td>
                                 <span
                                     className={`badge ${parcel.payment_status === "paid"
@@ -131,7 +129,7 @@ const MyParcels = () => {
                     ))}
                     {parcels.length === 0 && (
                         <tr>
-                            <td colSpan="5" className="text-center text-gray-400">
+                            <td colSpan="6" className="text-center text-gray-500 py-6">
                                 No parcels found.
                             </td>
                         </tr>
