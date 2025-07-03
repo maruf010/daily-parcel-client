@@ -117,14 +117,11 @@ const CheckoutForm = () => {
                             details: `Created by ${user.displayName}`,
                             updated_by: user.email,
                         })
-
                         navigate('/dashboard/myParcels')
                     }
                 }
             }
         };
-
-
     };
 
     return (

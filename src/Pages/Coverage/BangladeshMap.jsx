@@ -75,16 +75,17 @@ const BangladeshMap = ({ serviceCenters }) => {
                 <FlyToDistrict coords={activeCoords} />
 
                 {
-                    serviceCenters.map((center, index) => <Marker
-                        key={index}
-                        position={[center.latitude, center.longitude]}
-                        icon={customIcon}>
-                        <Popup
-                            autoOpen={center.district === activeDistrict}>
-                            <strong>{center.district}</strong><br />
-                            {center.covered_area.join(', ')}
-                        </Popup>
-                    </Marker>)
+                    serviceCenters.map((center, index) =>
+                        <Marker
+                            key={index}
+                            position={[center.latitude, center.longitude]}
+                            icon={customIcon}>
+                            <Popup
+                                autoOpen={center.district === activeDistrict}>
+                                <strong>{center.district}</strong><br />
+                                {center.covered_area.join(', ')}
+                            </Popup>
+                        </Marker>)
                 }
             </MapContainer>
         </div>
